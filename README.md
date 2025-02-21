@@ -27,10 +27,9 @@ program won't run based on the json
 config files found in the <i>bluestaq-elevator-app/resources/</i>
 folder.</b>
 
-Please read my notes in: <i>bluestaq-elevator-app/notes.txt</i>
-for an explanation.
+> Please read my notes in: <i>bluestaq-elevator-app/notes.txt</i> for an explanation.
 
-> <b>However</b> You can still configure the file.
+<b>However</b> You can still configure the file.
 
 You just need to go into the corresponding config
 java files and mess with the default parameters.
