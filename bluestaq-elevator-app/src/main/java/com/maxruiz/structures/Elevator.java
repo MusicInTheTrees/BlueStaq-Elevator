@@ -121,177 +121,6 @@ public class Elevator
       {
         throw new IllegalArgumentException("movingFrames is invalid.");
       }
-
-  }
-
-  /**
-   * @return
-   */
-  public int getID()
-  {
-    return ELEVATOR_ID;
-  }
-
-  /**
-   * @return is the position of the elevator at a floor or not (i.e. in motion)?
-   */
-  public boolean atFloor()
-  {
-    return (Position.AT_FLOOR == m_position);
-  }
-
-  /**
-   * @return
-   */
-  public int getCurrentFloor()
-  {
-    return m_currentFloor;
-  }
-
-  /**
-   * @return
-   */
-  public Direction getCurrentDirection()
-  {
-    return m_currentDirection;
-  }
-
-  /**
-   * @return is the current floor the target floor the elevator was headed?
-   */
-  public boolean atTargetFloor()
-  {
-    return m_targetFloor == m_currentFloor;
-  }
-
-  /**
-   * Check if the requested floor is a viable option for this particular elevator
-   * @param requestFloor
-   * @return boolean
-   */
-  public boolean passengerRequestInRange(int requestFloor)
-  {
-    return ((requestFloor <= HIGHEST_FLOOR) || 
-            (requestFloor >= LOWEST_FLOOR));
-  }
-
-  /**
-   * This function will push back a passengers request IFF it's not already in the queue
-   * It does not accept multiple requests even though a passenger could be requesting
-   * to go up or down
-   * @param requestFloor int - floor request from a passenger in the building
-   */
-  public void receivePassengerRequest(int requestFloor)
-  {  
-    if (m_requestFloorList.contains(requestFloor))
-    {
-      System.out.println("Elevator Control: Floor " + requestFloor + " has already been requested.");
-      return;
-    }
-
-    m_requestFloorList.add(requestFloor);
-
-    System.out.println("Elevator Control: Accepted passenger request at floor: " + requestFloor);
-  }
-
-  /**
-   * @param stuckFloor floor that the building event caused the elevator to be stuck at
-   */
-  public void receiveMaintenanceRequest(int stuckFloor)
-  {
-    m_state = State.MAINTENANCE;
-  }
-
-  /**
-   * @param originFloor floor that the firefighter starts on
-   * @param floorOnFire floor that's on fire
-   */
-  public void receiveFirefighterRequest(int originFloor, int floorOnFire)
-  {
-    m_state = State.FIRE;
-  }
-
-  /**
-   * The elevator has a finite amount of space, check how much of that is used and send back the remainder
-   * @return int 
-   */
-  public int remainingSpace()
-  {
-    return (MAX_SQFT - m_onBoardSpaceTaken);
-  }
-
-  /**
-   * Check if the passenger can get aboard the elevator.
-   * Can they fit?
-   * Is their request within the elevators range?
-   * @param p Passenger
-   * @return boolean
-   * @see Passenger
-   */
-  public boolean canAcceptPassenger(Passenger p)
-  {
-    // Passenger is too big
-    if (p.getSqft() > remainingSpace())
-    {
-      System.out.println(elevatorHeaderStr() + "Passenger is too big. Passenger denied!");
-      return false;
-    }
-
-    // Passenger wants to go somewhere this elevator can't
-    if (p.getDestinationFloor() < LOWEST_FLOOR ||
-        p.getDestinationFloor() > HIGHEST_FLOOR)
-    {
-      System.out.println(elevatorHeaderStr() + "Passenger wants to go to a floor this elevator cannot get to. Passenger denied!");
-      return false;
-    }
-    
-    return true;
-  }
-
-  /**
-   * If the passenger meets the conditions to come aboard, then let them.
-   * Add the passenger to the elevator list
-   * Set the passenger flag to onBoard
-   * Remove the passengers request from the elevator request list
-   * Effectively take away the passengers space from available space on the elevator
-   * @param passenger
-   * @return boolean - true: passenger accepted, false: passenger denied
-   * @see Passenger
-   * @see canAcceptPassenger
-   */
-  public boolean acceptPassenger(Passenger passenger)
-  {
-    if (false == canAcceptPassenger(passenger))
-    {
-      return false;
-    }
-
-    passenger.setOnElevator(true);
-
-    m_passengers.add(passenger);
-
-    System.out.println(elevatorHeaderStr() + "Passenger " + passenger.getID() + " entered the elevator");
-
-    Integer passengerOriginFloor = Integer.valueOf(passenger.getOriginFloor());
-
-    if (m_requestFloorList.contains(passengerOriginFloor))
-    {
-      m_requestFloorList.remove(passengerOriginFloor);
-      System.out.println(elevatorHeaderStr() + "Passenger " + passenger.getID() + "'s request " + passenger.getOriginFloor() + " was removed.");  
-    }
-    
-    m_onBoardSpaceTaken += passenger.getSqft();
-
-    return true;
-  }
-
-  /**
-   * Does this elevator contain any passengers?
-   * @return
-   */
-  public boolean hasPassengers()
-  {
-    return (!m_passengers.isEmpty());
   }
 
   /**
@@ -359,85 +188,6 @@ public class Elevator
 
     // Future endeavor
     m_state = State.NORMAL;
-  }
-
-  /**
-   * There is a static list of requests that passengers enter for all instances of elevators to check on
-   * and this method will check if the elevator meets the requirements to accept the next request,
-   * assuming there is one
-   * @return boolean
-   */
-  private boolean canTakeNextRequestFromList()
-  {
-    // Are there more requests to take?
-    if (m_requestFloorList.isEmpty())
-    {
-      System.out.println(elevatorHeaderStr() + "Cannot take request. Request floor list is empty.");
-      return false;
-    }
-
-    int possibleNextRequest = m_requestFloorList.get(0);
-    
-    // Can this particular elevator even travel to that floor?
-    if (false == passengerRequestInRange(possibleNextRequest))
-    {
-      System.out.println(elevatorHeaderStr() + "Cannot take request. It's out of range.");
-      return false;
-    }
-
-    // Is another elevator already working on this request?
-    if (m_requestsBeingHandled.contains(Integer.valueOf(possibleNextRequest)))
-    {
-      System.out.println(elevatorHeaderStr() + "Cannot take request. Already being handled by another elevator.");
-      return false;
-    }
-
-    return true;
-  }
-
-  /**
-   * A request floor is made by a passenger on a floor of the building
-   * This can vary from a request made by a passenger who is already on the elevator
-   * Therefore we need to distinguish if the targetFloor is from a passenger from
-   * outside or inside the elevator. The reason to distinguish this is so that
-   * multiple elevators aren't trying to head to the same passenger who made a 
-   * request on a floor of the building. So we also keep track of the proper 
-   * requests being handled, so that any requests in the queue, made by
-   * passengers on a floor, can be polled appropriately by the next elevator
-   * without any overlap.
-   * @return boolean
-   */
-  private boolean setTargetFloorAsNextRequestFromList()
-  {
-    if (false == canTakeNextRequestFromList())
-    {
-      return false;
-    }
-
-    m_targetFloor = m_requestFloorList.get(0);
-
-    m_requestFloorList.remove(Integer.valueOf(m_targetFloor));
-
-    m_requestsBeingHandled.add(m_targetFloor);
-
-    m_targetFloorIsRequestFloor = true;
-
-    return true;
-  }
-
-  /**
-   * If the target floor was reached and this target floor was a request made by a passenger
-   * not in the elevator, but rather a passenger on a floor of the building, then we
-   * need to make sure that we remove the request floor from the queue that holds the floors
-   * actively being handled by an elevator, as this elevator handled this request.
-   */
-  private void requestHandled()
-  {
-    if (m_targetFloorIsRequestFloor)
-    {
-      m_requestsBeingHandled.remove(Integer.valueOf(m_targetFloor));
-    }
-    
   }
 
   /**
@@ -721,6 +471,225 @@ public class Elevator
 
   }
 
+   /**
+   * If the target floor was reached and this target floor was a request made by a passenger
+   * not in the elevator, but rather a passenger on a floor of the building, then we
+   * need to make sure that we remove the request floor from the queue that holds the floors
+   * actively being handled by an elevator, as this elevator handled this request.
+   */
+  private void requestHandled()
+  {
+    if (m_targetFloorIsRequestFloor)
+    {
+      m_requestsBeingHandled.remove(Integer.valueOf(m_targetFloor));
+    }
+  }
+
+  /**
+   * This function will push back a passengers request IFF it's not already in the queue
+   * It does not accept multiple requests even though a passenger could be requesting
+   * to go up or down
+   * @param requestFloor int - floor request from a passenger in the building
+   */
+  public void receivePassengerRequest(int requestFloor)
+  {  
+    if (m_requestFloorList.contains(requestFloor))
+    {
+      System.out.println("Elevator Control: Floor " + requestFloor + " has already been requested.");
+      return;
+    }
+
+    m_requestFloorList.add(requestFloor);
+
+    System.out.println("Elevator Control: Accepted passenger request at floor: " + requestFloor);
+  }
+
+  /**
+   * @param stuckFloor floor that the building event caused the elevator to be stuck at
+   */
+  public void receiveMaintenanceRequest(int stuckFloor)
+  {
+    m_state = State.MAINTENANCE;
+  }
+
+  /**
+   * @param originFloor floor that the firefighter starts on
+   * @param floorOnFire floor that's on fire
+   */
+  public void receiveFirefighterRequest(int originFloor, int floorOnFire)
+  {
+    m_state = State.FIRE;
+  }
+
+  /**
+   * Check if the passenger can get aboard the elevator.
+   * Can they fit?
+   * Is their request within the elevators range?
+   * @param p Passenger
+   * @return boolean
+   * @see Passenger
+   */
+  public boolean canAcceptPassenger(Passenger p)
+  {
+    // Passenger is too big
+    if (p.getSqft() > remainingSpace())
+    {
+      System.out.println(elevatorHeaderStr() + "Passenger is too big. Passenger denied!");
+      return false;
+    }
+
+    // Passenger wants to go somewhere this elevator can't
+    if (p.getDestinationFloor() < LOWEST_FLOOR ||
+        p.getDestinationFloor() > HIGHEST_FLOOR)
+    {
+      System.out.println(elevatorHeaderStr() + "Passenger wants to go to a floor this elevator cannot get to. Passenger denied!");
+      return false;
+    }
+    
+    return true;
+  }
+
+  /**
+   * If the passenger meets the conditions to come aboard, then let them.
+   * Add the passenger to the elevator list
+   * Set the passenger flag to onBoard
+   * Remove the passengers request from the elevator request list
+   * Effectively take away the passengers space from available space on the elevator
+   * @param passenger
+   * @return boolean - true: passenger accepted, false: passenger denied
+   * @see Passenger
+   * @see canAcceptPassenger
+   */
+  public boolean acceptPassenger(Passenger passenger)
+  {
+    if (false == canAcceptPassenger(passenger))
+    {
+      return false;
+    }
+
+    passenger.setOnElevator(true);
+
+    m_passengers.add(passenger);
+
+    System.out.println(elevatorHeaderStr() + "Passenger " + passenger.getID() + " entered the elevator");
+
+    Integer passengerOriginFloor = Integer.valueOf(passenger.getOriginFloor());
+
+    if (m_requestFloorList.contains(passengerOriginFloor))
+    {
+      m_requestFloorList.remove(passengerOriginFloor);
+      System.out.println(elevatorHeaderStr() + "Passenger " + passenger.getID() + "'s request " + passenger.getOriginFloor() + " was removed.");  
+    }
+    
+    m_onBoardSpaceTaken += passenger.getSqft();
+
+    return true;
+  }
+
+  /**
+   * There is a static list of requests that passengers enter for all instances of elevators to check on
+   * and this method will check if the elevator meets the requirements to accept the next request,
+   * assuming there is one
+   * @return boolean
+   */
+  private boolean canTakeNextRequestFromList()
+  {
+    // Are there more requests to take?
+    if (m_requestFloorList.isEmpty())
+    {
+      System.out.println(elevatorHeaderStr() + "Cannot take request. Request floor list is empty.");
+      return false;
+    }
+
+    int possibleNextRequest = m_requestFloorList.get(0);
+    
+    // Can this particular elevator even travel to that floor?
+    if (false == passengerRequestInRange(possibleNextRequest))
+    {
+      System.out.println(elevatorHeaderStr() + "Cannot take request. It's out of range.");
+      return false;
+    }
+
+    // Is another elevator already working on this request?
+    if (m_requestsBeingHandled.contains(Integer.valueOf(possibleNextRequest)))
+    {
+      System.out.println(elevatorHeaderStr() + "Cannot take request. Already being handled by another elevator.");
+      return false;
+    }
+
+    return true;
+  }
+
+  /**
+   * A request floor is made by a passenger on a floor of the building
+   * This can vary from a request made by a passenger who is already on the elevator
+   * Therefore we need to distinguish if the targetFloor is from a passenger from
+   * outside or inside the elevator. The reason to distinguish this is so that
+   * multiple elevators aren't trying to head to the same passenger who made a 
+   * request on a floor of the building. So we also keep track of the proper 
+   * requests being handled, so that any requests in the queue, made by
+   * passengers on a floor, can be polled appropriately by the next elevator
+   * without any overlap.
+   * @return boolean
+   */
+  private boolean setTargetFloorAsNextRequestFromList()
+  {
+    if (false == canTakeNextRequestFromList())
+    {
+      return false;
+    }
+
+    m_targetFloor = m_requestFloorList.get(0);
+
+    m_requestFloorList.remove(Integer.valueOf(m_targetFloor));
+
+    m_requestsBeingHandled.add(m_targetFloor);
+
+    m_targetFloorIsRequestFloor = true;
+
+    return true;
+  }
+
+  /**
+   * @return
+   */
+  public int getID()
+  {
+    return ELEVATOR_ID;
+  }
+
+  /**
+   * @return is the position of the elevator at a floor or not (i.e. in motion)?
+   */
+  public boolean atFloor()
+  {
+    return (Position.AT_FLOOR == m_position);
+  }
+
+  /**
+   * @return
+   */
+  public int getCurrentFloor()
+  {
+    return m_currentFloor;
+  }
+
+  /**
+   * @return
+   */
+  public Direction getCurrentDirection()
+  {
+    return m_currentDirection;
+  }
+
+  /**
+   * @return is the current floor the target floor the elevator was headed?
+   */
+  public boolean atTargetFloor()
+  {
+    return m_targetFloor == m_currentFloor;
+  }
+
   /**
    * Is the elevator direction UP?
    * @return boolean
@@ -758,6 +727,15 @@ public class Elevator
   }
 
   /**
+   * Does this elevator contain any passengers?
+   * @return
+   */
+  public boolean hasPassengers()
+  {
+    return (!m_passengers.isEmpty());
+  }
+
+  /**
    * Is the state of the elevator in maintenance mode?
    * @return boolean
    */
@@ -787,6 +765,26 @@ public class Elevator
   public boolean canReachFloor(int floor)
   {
     return ( (floor >= LOWEST_FLOOR) && (floor <= HIGHEST_FLOOR) );
+  }
+
+  /**
+   * Check if the requested floor is a viable option for this particular elevator
+   * @param requestFloor
+   * @return boolean
+   */
+  public boolean passengerRequestInRange(int requestFloor)
+  {
+    return ((requestFloor <= HIGHEST_FLOOR) || 
+            (requestFloor >= LOWEST_FLOOR));
+  }
+
+  /**
+   * The elevator has a finite amount of space, check how much of that is used and send back the remainder
+   * @return int 
+   */
+  public int remainingSpace()
+  {
+    return (MAX_SQFT - m_onBoardSpaceTaken);
   }
 
   /**

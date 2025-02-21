@@ -172,23 +172,6 @@ public class Building
   }
 
   /**
-   * Set the event to affect the rest of the system. The event 
-   * is either pulled from the list of custom events or it is
-   * randomly generated.
-   */
-  private void updateCurrentEvent()
-  {
-    if (USE_CUSTOM_EVENTS)
-    {
-      m_currentEvent = m_eventController.getNextCustomEvent();
-    }
-    else 
-    {
-      m_currentEvent = m_eventController.getNextRandomEvent();
-    }
-  }
-
-  /**
    * Run the event loop for the building.
    * Events are procurred and applied to the system.
    */
@@ -475,6 +458,23 @@ public class Building
       {
         System.out.println("Building: Elevator " + elevator.getID() + " is between floors.");
       }
+    }
+  }
+
+  /**
+   * Set the event to affect the rest of the system. The event 
+   * is either pulled from the list of custom events or it is
+   * randomly generated.
+   */
+  private void updateCurrentEvent()
+  {
+    if (USE_CUSTOM_EVENTS)
+    {
+      m_currentEvent = m_eventController.getNextCustomEvent();
+    }
+    else 
+    {
+      m_currentEvent = m_eventController.getNextRandomEvent();
     }
   }
 
