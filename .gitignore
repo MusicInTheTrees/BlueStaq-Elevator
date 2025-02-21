@@ -3,3 +3,6 @@
 
 # Compiled Output
 target/
+
+# Code Output
+system_out.txt
