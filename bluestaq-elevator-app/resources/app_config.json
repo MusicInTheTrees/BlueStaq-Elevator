@@ -1,0 +1,5 @@
+{
+    "frame_rate": 5,
+    "print_to_file": true,
+    "print_to_file_name": "test_output.txt"
+}

@@ -1,0 +1,13 @@
+{
+    "passenger_priorities": [
+        {
+            "civilian": 0
+        },
+        {
+            "maintenance_staff": 1
+        },
+        {
+            "firefighter": 2
+        }
+    ]
+}

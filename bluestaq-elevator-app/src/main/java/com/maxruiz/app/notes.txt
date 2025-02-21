@@ -1,0 +1,41 @@
+
+
+Notes on this project
+1) This program is NOT thread safe.
+2) This program could be built in a way to make it threaded, 
+     but that's not neccessary to accomplish the goal. No need to overcomplicate.
+2.a) How? You could have events created and pushed onto a stack that the building
+     could injest. I would need to implement some synchronization of the event handlers.
+     I would also need to build a separate elevator request queue that could be 
+     synchronized as well. There only needs to be one request queue for every instance
+     of the elevator.
+
+/* 
+ * ResourceManager
+ * Known incomplete class. I failed to get Gson to work.
+ * I followed guides online.
+ * 1) You will find in my repo that there is a 'scripts' folder that has
+ *     how I attempted to manually install the module after downloading it
+ * 2) You will also find in the 'libs' folder the .jar file that I used
+ * 3) You will see in my pom file that I really tried (several) methods to get
+ *     it to work.
+ */
+
+/* 
+ * So then why not keep trying to get gson until you succeed... :(
+ * Many reasons! I'll explain in person, but here's the tl;dr
+ * ----------------------------------------------------------
+ * I have a full time job that I'm balancing
+ * I'm learning java as fast as I possibly can and I promise I can get this
+ *   working with just a little bit more dedicated time.
+ * I just went through a very difficult breakup
+ * I had to move back to my parents (embarassing) for the time being because I have no where else to live
+ * I'm trying to get my life back together financially and am having to sell almost all of
+ *   my belongings.
+ * My truck is damage from slipping into rocks on the ice and I'm trying to get it fixed and traded
+ * I'm trying to stay physically active at the gym even though I'm going through a difficult time
+ * I'm applying to other jobs just in case, even though I want this job more than anything!
+ *   Trust me I've been pouring myself into this as much as I can.
+ * ----------------------------------------------------------
+ * I'm hopping off my soap box of sob stories for now! Thanks for coming to my TedTalk!
+ */

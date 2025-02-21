@@ -1,0 +1,15 @@
+{
+    "use_custom_events": false,
+    "lowest_floor": 0,
+    "highest_floor": 10,
+    "max_number_of_passengers_per_floor": 3,
+    "elevators": [
+        {
+            "ID": "1234",
+            "starting_floor": 0,
+            "sqft": 15,
+            "at_floor_frames": 4,
+            "moving_frames": 4
+        }
+    ]
+}

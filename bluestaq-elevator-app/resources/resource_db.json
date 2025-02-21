@@ -1,0 +1,8 @@
+{
+    "json_paths": [
+        "resources/custom_events.json",
+        "resources/building_config.json",
+        "resources/passenger_priorities.json",
+        "resources/app_config.json"
+    ]
+}
