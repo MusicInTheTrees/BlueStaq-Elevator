@@ -96,12 +96,14 @@ java files and mess with the default parameters.
   * Frame Rate of the application
   * Print to File (or to console) flag
   * Print to File, Filename
+
 * BuildingConfig.java - <i>loadDefaultBuildingConfig()</i>
   * Lowest Floor
   * Highest Floor
   * Maximum number of passengers that can wait on a floor for the elevator
   * Use a set of custom events
   * Elevator configuration set - <b>Can be any number of elevators</b>
+
 * ElevatorConfig.java - <i>loadDefaultElevatorConfig()</i>
   * Elevator ID
   * Starting Floor
