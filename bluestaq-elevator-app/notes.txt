@@ -23,18 +23,5 @@ Notes on this project
 
 /* 
  * So then why not keep trying to get gson until you succeed... :(
- * Many reasons! I'll explain in person, but here's the tl;dr
- * ----------------------------------------------------------
- * I have a full time job that I'm balancing
- * I'm learning java as fast as I possibly can and I promise I can get this
- *   working with just a little bit more dedicated time.
- * I just went through a very difficult breakup
- * I'm trying to get my life back together financially and am having to sell almost all of
- *   my belongings.
- * My truck is damage from slipping into rocks on the ice and I'm trying to get it fixed and traded
- * I'm trying to stay physically active at the gym even though I'm going through a difficult time
- * I'm applying to other jobs just in case, even though I want this job more than anything!
- *   Trust me I've been pouring myself into this as much as I can.
- * ----------------------------------------------------------
- * I'm hopping off my soap box of sob stories for now! Thanks for coming to my TedTalk!
+ * Normally, I absolutely would, but I have many reasons that I'll explain in person
  */
