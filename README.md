@@ -46,36 +46,36 @@ These events include
   * Flow returns to normal
 
 ### Passengers
-A passenger will appear on a random floor with a random destination.
+* A passenger will appear on a random floor with a random destination.
 
-The passenger can get sick while traveling in an elevator and will get off at the next floor
+* A passenger can get sick while traveling in an elevator and will get off at the next floor
 they arrive at.
 
-A passenger will not get on an elevator if the elevator is intended to go the wrong direction.
+* A passenger will not get on an elevator if the elevator is intended to go the wrong direction.
 
-A passenger will not get on an elevator if the elevator can't take them to their destination.
+* A passenger will not get on an elevator if the elevator can't take them to their destination.
 
-A passenger takes up space, therefore sometimes they can't fit on the elevator and will have to 
+* A passenger takes up space, therefore sometimes they can't fit on the elevator and will have to 
 submit another request.
 
-A passenger may miss the elevator if there are too many people waiting for the elevator and the
+* A passenger may miss the elevator if there are too many people waiting for the elevator and the
 time the elevator has it's doors open is too short.
 
 ### Elevator
-There can be any number of elevators.
+* There can be any number of elevators.
 
-The elevators share the same request queue so multiple elevators won't try to pick up the same
+* The elevators share the same request queue so multiple elevators won't try to pick up the same
 passenger.
 
-The elevators will fulfill the requests of on-board passengers before focusing on a request of 
+* The elevators will fulfill the requests of on-board passengers before focusing on a request of 
 a passenger waiting on a floor.
 
-The elevator will stop and accept a passenger if the passenger is on the way to the target floor.
+* The elevator will stop and accept a passenger if the passenger is on the way to the target floor.
 
-The elevator will let a passenger off if the elevator passes by the passengers destination floor
+* The elevator will let a passenger off if the elevator passes by the passengers destination floor
 while on the way to the elevators target floor.
 
-The elevator will drop a sick passenger off at the next available floor and will continue to that
+* The elevator will drop a sick passenger off at the next available floor and will continue to that
 passengers original request, even without them, because the passenger didn't magically remove their
 request after they got off.
 
