@@ -2,8 +2,6 @@ package com.maxruiz.passengers;
 
 import java.util.Random;
 
-import javax.swing.text.Highlighter.Highlight;
-
 import com.maxruiz.utility.Direction;
 
 import com.maxruiz.config.PassengerConfig;
