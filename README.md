@@ -135,4 +135,6 @@ I followed guides online.
 
 So then why not keep trying to get gson until you succeed... :(
 
-Normally, I absolutely would, but I have many reasons that I'll explain in person
+Normally, I absolutely would, but...
+1) Time
+2) Many other reasons that I'll explain in person
