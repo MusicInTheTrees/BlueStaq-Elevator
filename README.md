@@ -25,17 +25,17 @@ for an explanation.
 You just need to go into the corresponding config
 java files and mess with the default parameters.
 
-* AppConfig.java
+* AppConfig.java - <i>loadDefaultAppConfig()</i>
   * Frame Rate of the application
   * Print to File (or to console) flag
   * Print to File, Filename
-* BuildingConfig.java
+* BuildingConfig.java - <i>loadDefaultBuildingConfig()</i>
   * Lowest Floor
   * Highest Floor
   * Maximum number of passengers that can wait on a floor for the elevator
   * Use a set of custom events
   * Elevator configuration set
-* ElevatorConfig.java
+* ElevatorConfig.java - <i>loadDefaultElevatorConfig()</i>
   * Elevator ID
   * Starting Floor
   * Square Footage of the elevator
