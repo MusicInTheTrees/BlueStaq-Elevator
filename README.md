@@ -124,7 +124,7 @@ java files and mess with the default parameters.
      synchronized as well. There only needs to be one request queue for every instance
      of the elevator.
 
-<i>ResourceManager<i>
+<i>ResourceManager</i>
 Known incomplete class. I failed to get Gson to work.
 I followed guides online.
 1) You will find in my repo that there is a 'scripts' folder that has
@@ -134,4 +134,5 @@ I followed guides online.
     it to work.
 
 So then why not keep trying to get gson until you succeed... :(
+
 Normally, I absolutely would, but I have many reasons that I'll explain in person
