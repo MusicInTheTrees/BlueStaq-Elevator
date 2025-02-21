@@ -11,5 +11,24 @@
             "at_floor_frames": 4,
             "moving_frames": 4
         }
-    ]
+    ],
+	"use_custom_passengers" : false,
+	"passengers": [
+		{
+			"title" : "civilian",
+			"origin_floor" : 0,
+			"lowest_floor" : 0,
+			"highest_floor" : 10,
+			"sqft" : 4,
+			"sick_factors" : [0.01, 1.1]
+		},
+		{
+			"title" : "civilian",
+			"origin_floor" : 4,
+			"lowest_floor" : 0,
+			"highest_floor" : 10,
+			"sqft" : 6
+			"sick_factors" : []
+		},
+	]
 }

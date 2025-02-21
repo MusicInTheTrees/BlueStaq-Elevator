@@ -73,4 +73,14 @@ public class PassengerPriority
     
     return m_priorityMap.get(title);
   }
+
+  public Integer getLowestPriority()
+  {
+    return m_lowestPriority;
+  }
+
+  public Integer getHighestPriority()
+  {
+    return HIGHEST_PRIORITY;
+  }
 }

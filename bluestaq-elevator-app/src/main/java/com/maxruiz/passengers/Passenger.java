@@ -2,7 +2,11 @@ package com.maxruiz.passengers;
 
 import java.util.Random;
 
+import javax.swing.text.Highlighter.Highlight;
+
 import com.maxruiz.utility.Direction;
+
+import com.maxruiz.config.PassengerConfig;
 
 // The idea here is that there can be different types of people who 
 // need to interact with the elevator.
@@ -28,15 +32,14 @@ import com.maxruiz.utility.Direction;
  * internally that effect the operation of the elevator. An example is a 
  * passenger becoming sick or being too big to fit on the elevator.
  */
-public class Passenger {
-  final int MIN_PASSENGER_SQFT = 2;
+public class Passenger 
+{
+  protected final int HIGHEST_FLOOR;
+  protected final int LOWEST_FLOOR;
+  protected final int SQFT;
+  protected final Integer PRIORITY;
+  protected final int ID;
 
-  // with rng max boundary being exclusive
-  // the effective max will be MAX_PASSENGER_SQFT-1
-  final int MAX_PASSENGER_SQFT = 10; 
-
-  protected final int m_sqft;
-  protected final Integer m_priority;
   protected Direction m_destinationDirection;
   protected int m_destinationFloor;
   protected int m_originFloor;
@@ -47,9 +50,7 @@ public class Passenger {
   protected boolean m_onElevator = false;
   protected Random m_randomGen;
   protected static int m_passengerCount = 0;
-  protected final int ID;
- 
-
+  
   /**
    * Constructor for Passenger which randomly generates which floor this passenger
    * is on, where they want to go, how big they are and other attributes that affect
@@ -61,20 +62,70 @@ public class Passenger {
    * @param lowestFloor - the lowest floor in the building
    * @param highestFloor - the highest floor in the building
    */
-  public Passenger(Integer priority, int originFloor, int lowestFloor, int highestFloor)
+  public Passenger(Integer priority, int originFloor, int lowestFloor, 
+                   int highestFloor, int sqft)
   {
-    m_randomGen = new Random();
-
-    ID = m_passengerCount;
-    m_passengerCount++;
-
-    m_sqft = m_randomGen.nextInt(MIN_PASSENGER_SQFT, MAX_PASSENGER_SQFT);
-
+    ID = m_passengerCount++;
+    SQFT = sqft;
+    LOWEST_FLOOR = lowestFloor;
+    HIGHEST_FLOOR = highestFloor;
+    PRIORITY = priority;
     m_originFloor = originFloor;
     m_currentFloor = m_originFloor;
 
+    init();
+    
+  }
+
+  /**
+   * Constructor for Passenger that takes in a PassengerConfig to build this instance
+   * @param pc
+   * @see PassengerConfig
+   */
+  public Passenger(PassengerConfig pc)
+  {
+    ID = m_passengerCount++;
+    LOWEST_FLOOR = pc.getLowestFloor();
+    HIGHEST_FLOOR = pc.getHighestFloor();
+    SQFT = pc.getSqft();
+    PRIORITY = pc.getPriority();
+    m_originFloor = pc.getOriginFloor();
+    m_currentFloor = m_originFloor;
+
+    init();
+  }
+
+  private void init()
+  {
+    if (null == PRIORITY)
+    {
+      throw new IllegalArgumentException("Passenger Priority is Invalid.");
+    }
+
+    if (PRIORITY < 0)
+    {
+      throw new IllegalArgumentException("Priority is invalid.");
+    }
+
+    if (LOWEST_FLOOR >= HIGHEST_FLOOR)
+    {
+      throw new IllegalArgumentException("Lowest floor and highest floor values are invalid.");
+    }
+
+    if (m_originFloor < LOWEST_FLOOR || m_originFloor > HIGHEST_FLOOR)
+    {
+      throw new IllegalArgumentException("Origin floor is invalid.");
+    }
+
+    if (SQFT <= 0)
+    {
+      throw new IllegalArgumentException("Sqft value is invalid.");
+    }
+
+    m_randomGen = new Random();
+
     //m_destinationFloor
-    setRandomDestinationFloor(m_originFloor, lowestFloor, highestFloor);
+    setRandomDestinationFloor(m_originFloor, LOWEST_FLOOR, HIGHEST_FLOOR);
 
     if (m_destinationFloor < m_originFloor)
     {
@@ -86,13 +137,6 @@ public class Passenger {
     }
 
     m_isSick = false;
-
-    m_priority = priority;
-
-    if (null == m_priority)
-    {
-      throw new IllegalArgumentException("Passenger Priority is Invalid.");
-    }
   }
 
   /**
@@ -172,7 +216,7 @@ public class Passenger {
    */
   public final int getSqft()
   {
-    return m_sqft;
+    return SQFT;
   }
 
   /**
@@ -248,7 +292,7 @@ public class Passenger {
    */
   public final int getPriority()
   {
-    return m_priority.intValue();
+    return PRIORITY.intValue();
   }
 
   /**

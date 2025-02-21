@@ -1,5 +1,7 @@
 package com.maxruiz.passengers;
 
+import com.maxruiz.config.PassengerConfig;
+
 /**
  * This class superclasses Passenger to override how this passenger gets sick
  * as well as provide a specific priority.
@@ -16,10 +18,10 @@ public class MaintenanceStaff extends Passenger
    * @param lowestFloor - the lowest floor in the building
    * @param highestFloor - the highest floor in the building
    */
-  public MaintenanceStaff(int originFloor, int lowestFloor, int highestFloor)
+  public MaintenanceStaff(int originFloor, int lowestFloor, int highestFloor, int sqft)
   {
     super(PassengerPriority.get().getPriorityFromTitle("maintenance"), 
-          originFloor, lowestFloor, highestFloor);
+          originFloor, lowestFloor, highestFloor, sqft);
     SICK_FACTOR = 0.01;
   }
 
@@ -31,11 +33,25 @@ public class MaintenanceStaff extends Passenger
    * @param lowestFloor - the lowest floor in the building
    * @param highestFloor - the highest floor in the building
    */
-  public MaintenanceStaff(int originFloor, double sickFactor, int lowestFloor, int highestFloor)
+  public MaintenanceStaff(int originFloor, double sickFactor, int lowestFloor, int highestFloor, int sqft)
   {
     super(PassengerPriority.get().getPriorityFromTitle("maintenance"), 
-          originFloor, lowestFloor, highestFloor);
+          originFloor, lowestFloor, highestFloor, sqft);
     SICK_FACTOR = sickFactor;
+  }
+
+  /**
+   * Constructor for MaintenanceStaff that takes in a PassengerConfig to initialize all of the 
+   * parameters to build this instance
+   * @param pc
+   * @see PassengerConfig
+   */
+  public MaintenanceStaff(PassengerConfig pc)
+  {
+    super(PassengerPriority.get().getPriorityFromTitle("maintenance"), 
+          pc.getOriginFloor(), pc.getLowestFloor(), 
+          pc.getHighestFloor(), pc.getSqft());
+    SICK_FACTOR = pc.getSickFactorAt(0);
   }
 
   /**

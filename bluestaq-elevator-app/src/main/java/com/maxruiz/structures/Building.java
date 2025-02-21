@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import com.maxruiz.config.ElevatorConfig;
+import com.maxruiz.config.PassengerConfig;
 import com.maxruiz.config.BuildingConfig;
 import com.maxruiz.utility.EventController;
 import com.maxruiz.utility.Direction;
@@ -25,6 +26,9 @@ public class Building
   private final int MAX_NUM_PASSENGERS_PER_FLOOR;
   private final boolean USE_CUSTOM_EVENTS;
   private final ArrayList<ElevatorConfig> ELEVATOR_CONFIGS;
+  private final boolean USE_CUSTOM_PASSENGERS;
+  private ArrayList<Civilian> CUSTOM_PASSENGERS = new ArrayList<>();
+  private int m_customPassengerIndex = 0;
 
   private EventController m_eventController = new EventController();
   private EventController.EventType m_currentEvent = EventController.EventType.IDLE;
@@ -33,6 +37,8 @@ public class Building
   private Elevator m_elevator;
 
   private ArrayList<ArrayList<Passenger>> m_passengersPerFloor = new ArrayList<ArrayList<Passenger>>();
+  private int MIN_PASSENGER_SQFT = 2;
+  private int MAX_PASSENGER_SQFT = 10;
 
   private boolean m_onFire = false;
 
@@ -49,16 +55,19 @@ public class Building
    *                                  can only be so many people.
    */
   public Building(int lowestFloor, int highestFloor, int maxNumPassengersPerFloor, 
-                  boolean useCustomEvents, ArrayList<ElevatorConfig> elevatorConfigs)
+                  boolean useCustomEvents, ArrayList<ElevatorConfig> elevatorConfigs, 
+                  boolean usePassengerConfigs, ArrayList<PassengerConfig> passengerConfigs)
   {
     LOWEST_FLOOR = lowestFloor;
     HIGHEST_FLOOR = highestFloor;
     MAX_NUM_PASSENGERS_PER_FLOOR = maxNumPassengersPerFloor;
     USE_CUSTOM_EVENTS = useCustomEvents;
     ELEVATOR_CONFIGS = elevatorConfigs;
+    USE_CUSTOM_PASSENGERS = usePassengerConfigs;
 
     init();
-    
+
+    loadCustomPassengers(passengerConfigs);
   }
 
   /**
@@ -74,8 +83,11 @@ public class Building
     MAX_NUM_PASSENGERS_PER_FLOOR = bc.getMaxNumPassengersPerFloor();
     USE_CUSTOM_EVENTS = bc.usingCustomEvents();
     ELEVATOR_CONFIGS = bc.getElevatorConfigs();
+    USE_CUSTOM_PASSENGERS = bc.usingCustomPassengers();
 
     init();
+
+    loadCustomPassengers(bc.getPassengerConfigs());
   }
 
   /**
@@ -92,8 +104,11 @@ public class Building
     MAX_NUM_PASSENGERS_PER_FLOOR = bc.getMaxNumPassengersPerFloor();
     USE_CUSTOM_EVENTS = bc.usingCustomEvents();
     ELEVATOR_CONFIGS = bc.getElevatorConfigs();
+    USE_CUSTOM_PASSENGERS = bc.usingCustomPassengers();
 
     init();
+
+    loadCustomPassengers(bc.getPassengerConfigs());
   }
 
   /**
@@ -171,6 +186,21 @@ public class Building
     m_eventController.loadCustomEventList();
   }
 
+  private void loadCustomPassengers(ArrayList<PassengerConfig> passengerConfigs)
+  {
+    if (passengerConfigs.isEmpty())
+    {
+      return;
+    }
+
+    // Only concerned about general passengers or Civilians
+    for (PassengerConfig pc : passengerConfigs)
+    {
+      CUSTOM_PASSENGERS.add(new Civilian(pc));
+    }
+
+  }
+
   /**
    * Run the event loop for the building.
    * Events are procurred and applied to the system.
@@ -237,10 +267,19 @@ public class Building
 
     // Generate 1 regular passenger (aka civilian)
 
-    int passengerFloor = getRandomFloor();
     
-    Civilian civ = new Civilian(passengerFloor, LOWEST_FLOOR, HIGHEST_FLOOR);
     
+    Civilian civ = getNextCivilian();
+
+    if (null == civ)
+    {
+      // treat as idle event
+      System.out.println("Building: No more people in the building.");
+      return;
+    }
+    
+    int passengerFloor = civ.getOriginFloor();
+
     boolean canFitPassenger = canFitPassengerOnFloor(passengerFloor);
 
     if (canFitPassenger)
@@ -307,7 +346,7 @@ public class Building
     }
 
     int stuckFloor = elevator.getCurrentFloor();
-    MaintenanceStaff staff = new MaintenanceStaff(stuckFloor, LOWEST_FLOOR, HIGHEST_FLOOR);
+    MaintenanceStaff staff = new MaintenanceStaff(stuckFloor, LOWEST_FLOOR, HIGHEST_FLOOR, getRandomPassengerSize());
 
     System.out.println("Building: Stuck Floor: " + stuckFloor);
     if (canFitPassengerOnFloor(stuckFloor))
@@ -368,7 +407,7 @@ public class Building
     }
     
     
-    Firefighter firefighter = new Firefighter(floorOnFire, LOWEST_FLOOR, HIGHEST_FLOOR);
+    Firefighter firefighter = new Firefighter(floorOnFire, LOWEST_FLOOR, HIGHEST_FLOOR, getRandomPassengerSize());
 
     System.out.println("Building: Floor on Fire: " + floorOnFire);
 
@@ -485,6 +524,32 @@ public class Building
   private int getRandomFloor()
   {
     return m_rng.nextInt(LOWEST_FLOOR, HIGHEST_FLOOR);
+  }
+
+  private Civilian getNextCivilian()
+  {
+    if (USE_CUSTOM_PASSENGERS)
+    {
+      if (m_customPassengerIndex >= CUSTOM_PASSENGERS.size())
+      {
+        return null;
+      }
+
+      return CUSTOM_PASSENGERS.get(m_customPassengerIndex++);
+    }
+
+    return getRandomCivilian();
+  }
+
+  private Civilian getRandomCivilian()
+  {
+    int originFloor = getRandomFloor();
+    return new Civilian(originFloor, LOWEST_FLOOR, HIGHEST_FLOOR, getRandomPassengerSize());
+  }
+
+  private int getRandomPassengerSize()
+  {
+    return m_rng.nextInt(MIN_PASSENGER_SQFT, MAX_PASSENGER_SQFT);
   }
 
   /**

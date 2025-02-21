@@ -1,5 +1,7 @@
 package com.maxruiz.passengers;
 
+import com.maxruiz.config.PassengerConfig;
+
 /**
  * This class superclasses Passenger to override how this passenger gets sick
  * as well as provide a specific priority.
@@ -16,10 +18,10 @@ public class Firefighter extends Passenger
    * @param lowestFloor - the lowest floor in the building
    * @param highestFloor - the highest floor in the building
    */
-  public Firefighter(int destinationFloor, int lowestFloor, int highestFloor)
+  public Firefighter(int destinationFloor, int lowestFloor, int highestFloor, int sqft)
   {
     super(PassengerPriority.get().getPriorityFromTitle("firefighter"), 
-          0, lowestFloor, highestFloor);
+          0, lowestFloor, highestFloor, sqft);
     SICK_FACTOR = 0.001;
   }
 
@@ -31,11 +33,25 @@ public class Firefighter extends Passenger
    * @param lowestFloor - the lowest floor in the building
    * @param highestFloor - the highest floor in the building
    */
-  public Firefighter(int destinationFloor, double sickFactor, int lowestFloor, int highestFloor)
+  public Firefighter(int destinationFloor, double sickFactor, int lowestFloor, int highestFloor, int sqft)
   {
     super(PassengerPriority.get().getPriorityFromTitle("firefighter"), 
-          0, lowestFloor, highestFloor);
+          0, lowestFloor, highestFloor, sqft);
     SICK_FACTOR = sickFactor;
+  }
+
+  /**
+   * Constructor for Firefighter that takes in a PassengerConfig to initialize all of the parameters
+   * to build this instance.
+   * @param pc
+   * @see PassengerConfig
+   */
+  public Firefighter(PassengerConfig pc)
+  {
+    super(PassengerPriority.get().getPriorityFromTitle("firefighter"), 
+          0, pc.getLowestFloor(), pc.getHighestFloor(), pc.getSqft());
+
+    SICK_FACTOR = pc.getSickFactorAt(0);
   }
 
   /**
