@@ -6,13 +6,13 @@ package com.maxruiz.config;
  */
 public class ElevatorConfig 
 {
-    private int m_ID = 0;
-    private int m_startingFloor = 0;
-    private int m_sqft = 15;
-    private int m_lowestFloor = 0;
-    private int m_highestFloor = 1;
-    private int m_atFloorFrames = 4;
-    private int m_movingFrames = 4;
+    private int m_ID;
+    private int m_startingFloor;
+    private int m_sqft;
+    private int m_lowestFloor;
+    private int m_highestFloor;
+    private int m_atFloorFrames;
+    private int m_movingFrames;
 
     private boolean m_hasUpdatedInstanceCounter = false;
 

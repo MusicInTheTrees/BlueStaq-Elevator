@@ -7,10 +7,10 @@ package com.maxruiz.config;
  */
 public class AppConfig
 {
-  private int m_frameRate = 5;
-  private int m_frameTimeMillis = 200;
-  private boolean m_printToFile = true;
-  private String m_printToFileName = "system_out.txt";
+  private int m_frameRate;
+  private int m_frameTimeMillis;
+  private boolean m_printToFile;
+  private String m_printToFileName;
 
   /**
    * Constuctor for AppConfig which takes in all the parameters to configure the main application

@@ -8,10 +8,10 @@ import java.util.ArrayList;
  */
 public class BuildingConfig
 {
-  private int m_lowestFloor = 0;
-  private int m_highestFloor = 10;
-  private int m_maxNumPassengerPerFloor = 3;
-  private boolean m_useCustomEvents = true;
+  private int m_lowestFloor;
+  private int m_highestFloor;
+  private int m_maxNumPassengerPerFloor;
+  private boolean m_useCustomEvents;
   private ArrayList<ElevatorConfig> m_elevatorConfigs = new ArrayList<>();
 
   /**
@@ -51,7 +51,7 @@ public class BuildingConfig
    */
   public void loadDefaultBuildingConfig()
   {
-    m_useCustomEvents = true;
+    m_useCustomEvents = false;
 
     m_lowestFloor = 0;
     m_highestFloor = 10;
