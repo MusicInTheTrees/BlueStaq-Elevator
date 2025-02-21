@@ -2,6 +2,14 @@
 This is my submission for the BlueStaq coding challenge.
 
 ## How to Build & Run
+
+
+Open a terminal at the root project directory: <i>bluestaq-elevator-app</i>
+> mvn clean install
+> java -cp .\target\bluestaq-elevator-app-1.0-SNAPSHOT.jar com.maxruiz.app.App 
+
+<b><i>OR</i></b>
+
 Navigate to the folder: <i>bluestaq-elevator-app/scripts/</i>
 
 Run the batch files:
@@ -21,7 +29,8 @@ folder.</b>
 Please read my notes in: <i>bluestaq-elevator-app/notes.txt</i>
 for an explanation.
 
-<b>However</b> You can still configure the file.
+> <b>However</b> You can still configure the file.
+
 You just need to go into the corresponding config
 java files and mess with the default parameters.
 
