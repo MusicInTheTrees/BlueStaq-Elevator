@@ -20,7 +20,11 @@ import com.maxruiz.passengers.*;
  */
 public class Building
 {
-  private BuildingConfig m_buildingConfig = null;
+  private final int LOWEST_FLOOR;
+  private final int HIGHEST_FLOOR;
+  private final int MAX_NUM_PASSENGERS_PER_FLOOR;
+  private final boolean USE_CUSTOM_EVENTS;
+  private final ArrayList<ElevatorConfig> ELEVATOR_CONFIGS;
 
   private EventController m_eventController = new EventController();
   private EventController.EventType m_currentEvent = EventController.EventType.IDLE;
@@ -44,11 +48,14 @@ public class Building
    *                                  overflow or memory issues. Plus, in reality, there
    *                                  can only be so many people.
    */
-  public Building(int lowestFloor, int highestFloor, int maxNumPassengerPerFloor, 
+  public Building(int lowestFloor, int highestFloor, int maxNumPassengersPerFloor, 
                   boolean useCustomEvents, ArrayList<ElevatorConfig> elevatorConfigs)
   {
-    m_buildingConfig = new BuildingConfig(lowestFloor, highestFloor, maxNumPassengerPerFloor, 
-                                          useCustomEvents, elevatorConfigs);
+    LOWEST_FLOOR = lowestFloor;
+    HIGHEST_FLOOR = highestFloor;
+    MAX_NUM_PASSENGERS_PER_FLOOR = maxNumPassengersPerFloor;
+    USE_CUSTOM_EVENTS = useCustomEvents;
+    ELEVATOR_CONFIGS = elevatorConfigs;
 
     init();
     
@@ -62,7 +69,11 @@ public class Building
    */
   public Building(BuildingConfig bc)
   {
-    m_buildingConfig = bc;
+    LOWEST_FLOOR = bc.getLowestFloor();
+    HIGHEST_FLOOR = bc.getHighestFloor();
+    MAX_NUM_PASSENGERS_PER_FLOOR = bc.getMaxNumPassengersPerFloor();
+    USE_CUSTOM_EVENTS = bc.usingCustomEvents();
+    ELEVATOR_CONFIGS = bc.getElevatorConfigs();
 
     init();
   }
@@ -74,7 +85,15 @@ public class Building
    */
   public Building()
   {
-    m_buildingConfig = new BuildingConfig();
+    BuildingConfig bc = new BuildingConfig();
+
+    LOWEST_FLOOR = bc.getLowestFloor();
+    HIGHEST_FLOOR = bc.getHighestFloor();
+    MAX_NUM_PASSENGERS_PER_FLOOR = bc.getMaxNumPassengersPerFloor();
+    USE_CUSTOM_EVENTS = bc.usingCustomEvents();
+    ELEVATOR_CONFIGS = bc.getElevatorConfigs();
+
+    init();
   }
 
   /**
@@ -86,13 +105,23 @@ public class Building
    */
   private void init()
   {
-    if (m_buildingConfig.getLowestFloor() >= m_buildingConfig.getHighestFloor())
+    if (LOWEST_FLOOR >= HIGHEST_FLOOR)
     {
       throw new IllegalArgumentException("Lowest and highest floor are invalid.");
     }
 
+    if (MAX_NUM_PASSENGERS_PER_FLOOR <= 0)
+    {
+      throw new IllegalArgumentException("maxNumPassengersPerFloor is invalid.");
+    }
+
+    if (ELEVATOR_CONFIGS.isEmpty() && m_elevators.isEmpty())
+    {
+      throw new IllegalArgumentException("There must be one or more ElevatorConfigs in the list.");
+    }
+
     // We only need floor many columns
-    int numFloors = m_buildingConfig.getHighestFloor() - m_buildingConfig.getLowestFloor();
+    int numFloors = HIGHEST_FLOOR - LOWEST_FLOOR;
 
     // Want highest floor accessable
     for (int i = 0; i <= numFloors; i++)
@@ -112,7 +141,13 @@ public class Building
    */
   private void loadElevators()
   {
-    for (ElevatorConfig ec : m_buildingConfig.getElevatorConfigs())
+    // Elevators have already been set
+    if (m_elevators.size() > 0)
+    {
+      return;
+    }
+
+    for (ElevatorConfig ec : ELEVATOR_CONFIGS)
     {
       m_elevators.add(new Elevator(ec));
 
@@ -143,7 +178,7 @@ public class Building
    */
   private void updateCurrentEvent()
   {
-    if (m_buildingConfig.usingCustomEvents())
+    if (USE_CUSTOM_EVENTS)
     {
       m_currentEvent = m_eventController.getNextCustomEvent();
     }
@@ -221,7 +256,7 @@ public class Building
 
     int passengerFloor = getRandomFloor();
     
-    Civilian civ = new Civilian(passengerFloor, m_buildingConfig.getLowestFloor(), m_buildingConfig.getHighestFloor());;
+    Civilian civ = new Civilian(passengerFloor, LOWEST_FLOOR, HIGHEST_FLOOR);
     
     boolean canFitPassenger = canFitPassengerOnFloor(passengerFloor);
 
@@ -289,7 +324,7 @@ public class Building
     }
 
     int stuckFloor = elevator.getCurrentFloor();
-    MaintenanceStaff staff = new MaintenanceStaff(stuckFloor, m_buildingConfig.getLowestFloor(), m_buildingConfig.getHighestFloor());
+    MaintenanceStaff staff = new MaintenanceStaff(stuckFloor, LOWEST_FLOOR, HIGHEST_FLOOR);
 
     System.out.println("Building: Stuck Floor: " + stuckFloor);
     if (canFitPassengerOnFloor(stuckFloor))
@@ -332,7 +367,7 @@ public class Building
 
     m_onFire = true;
     
-    int floorOnFire = m_rng.nextInt(m_buildingConfig.getHighestFloor());
+    int floorOnFire = m_rng.nextInt(HIGHEST_FLOOR);
     Elevator elevator = null;
 
     for (int i = 0; i < m_elevators.size(); i++)
@@ -350,7 +385,7 @@ public class Building
     }
     
     
-    Firefighter firefighter = new Firefighter(floorOnFire, m_buildingConfig.getLowestFloor(), m_buildingConfig.getHighestFloor());
+    Firefighter firefighter = new Firefighter(floorOnFire, LOWEST_FLOOR, HIGHEST_FLOOR);
 
     System.out.println("Building: Floor on Fire: " + floorOnFire);
 
@@ -449,7 +484,7 @@ public class Building
    */
   private int getRandomFloor()
   {
-    return m_rng.nextInt(m_buildingConfig.getLowestFloor(), m_buildingConfig.getHighestFloor());
+    return m_rng.nextInt(LOWEST_FLOOR, HIGHEST_FLOOR);
   }
 
   /**
@@ -460,12 +495,12 @@ public class Building
    */
   private boolean canFitPassengerOnFloor(int floor)
   {
-    if (floor < m_buildingConfig.getLowestFloor() || floor > m_buildingConfig.getHighestFloor())
+    if (floor < LOWEST_FLOOR || floor > HIGHEST_FLOOR)
     {
       return false;
     }
 
-    if (m_passengersPerFloor.get(floor).size() < m_buildingConfig.getMaxNumPassengerPerFloor())
+    if (m_passengersPerFloor.get(floor).size() < MAX_NUM_PASSENGERS_PER_FLOOR)
     {
       return true;
     }

@@ -71,10 +71,10 @@ public class Elevator
     HIGHEST_FLOOR = highestFloor;
     m_currentFloor = startingFloor;
     m_targetFloor = m_currentFloor;
-
-    // POSSIBLE FEATURE: Pull this data in from a config file
     AT_FLOOR_FRAMES = atFloorFrames;
     MOVING_FRAMES = movingFrames;
+
+    init(startingFloor);
   }
 
   /**
@@ -88,10 +88,40 @@ public class Elevator
     HIGHEST_FLOOR = ec.getHighestFloor();
     m_currentFloor = ec.getStartingFloor();
     m_targetFloor = m_currentFloor;
-
-    // POSSIBLE FEATURE: Pull this data in from a config file
     AT_FLOOR_FRAMES = ec.getAtFloorFrames();
     MOVING_FRAMES = ec.getMovingFrames();
+
+    init(ec.getStartingFloor());
+  }
+
+  private void init(int startingFloor)
+  {
+    // Check arguments
+    if (LOWEST_FLOOR >= HIGHEST_FLOOR)
+      {
+        throw new IllegalArgumentException("Lowest and highest floor are invalid.");
+      }
+
+      if (startingFloor < LOWEST_FLOOR || startingFloor > HIGHEST_FLOOR)
+      {
+        throw new IllegalArgumentException("startingFloor is invalid.");
+      }
+
+      if (MAX_SQFT <= 0)
+      {
+        throw new IllegalArgumentException("Sqft is invalid.");
+      }
+
+      if (AT_FLOOR_FRAMES <= 0)
+      {
+        throw new IllegalArgumentException("atFloorFrames is invalid.");
+      }
+
+      if (MOVING_FRAMES <= 0)
+      {
+        throw new IllegalArgumentException("movingFrames is invalid.");
+      }
+
   }
 
   /**

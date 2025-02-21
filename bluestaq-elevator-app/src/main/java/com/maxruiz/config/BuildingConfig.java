@@ -2,6 +2,8 @@ package com.maxruiz.config;
 
 import java.util.ArrayList;
 
+import com.maxruiz.structures.Building;
+
 /**
  * This class holds the configuration data necessary to build a Building instance
  * @see Building
@@ -10,7 +12,7 @@ public class BuildingConfig
 {
   private int m_lowestFloor;
   private int m_highestFloor;
-  private int m_maxNumPassengerPerFloor;
+  private int m_maxNumPassengersPerFloor;
   private boolean m_useCustomEvents;
   private ArrayList<ElevatorConfig> m_elevatorConfigs = new ArrayList<>();
 
@@ -18,17 +20,32 @@ public class BuildingConfig
    * Constructor for BuildingConfig that accepts all of the configuration values as parameters
    * @param lowestFloor
    * @param highestFloor
-   * @param maxNumPassengerPerFloor
+   * @param maxNumPassengersPerFloor
    * @param useCustomEvents
    * @param elevatorConfigs
    */
   public BuildingConfig(int lowestFloor, int highestFloor, 
-                        int maxNumPassengerPerFloor, boolean useCustomEvents,
+                        int maxNumPassengersPerFloor, boolean useCustomEvents,
                         ArrayList<ElevatorConfig> elevatorConfigs)
   {
+    if (lowestFloor >= highestFloor)
+    {
+      throw new IllegalArgumentException("Lowest and highest floor are invalid.");
+    }
+
+    if (maxNumPassengersPerFloor <= 0)
+    {
+      throw new IllegalArgumentException("maxNumPassengersPerFloor is invalid.");
+    }
+
+    if (elevatorConfigs.isEmpty())
+    {
+      throw new IllegalArgumentException("There must be one or more ElevatorConfigs in the list.");
+    }
+    
     m_lowestFloor = lowestFloor;
     m_highestFloor = highestFloor;
-    m_maxNumPassengerPerFloor = maxNumPassengerPerFloor;
+    m_maxNumPassengersPerFloor = maxNumPassengersPerFloor;
     m_useCustomEvents = useCustomEvents;
     m_elevatorConfigs = elevatorConfigs;
   }
@@ -55,7 +72,7 @@ public class BuildingConfig
 
     m_lowestFloor = 0;
     m_highestFloor = 10;
-    m_maxNumPassengerPerFloor = 3;
+    m_maxNumPassengersPerFloor = 3;
     m_elevatorConfigs.clear();
     m_elevatorConfigs.add(new ElevatorConfig(m_lowestFloor, m_highestFloor));
 
@@ -70,8 +87,8 @@ public class BuildingConfig
     return m_highestFloor;
   }
 
-  public int getMaxNumPassengerPerFloor() {
-    return m_maxNumPassengerPerFloor;
+  public int getMaxNumPassengersPerFloor() {
+    return m_maxNumPassengersPerFloor;
   }
 
   public boolean usingCustomEvents() {

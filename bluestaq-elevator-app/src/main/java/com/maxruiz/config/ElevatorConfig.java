@@ -1,5 +1,7 @@
 package com.maxruiz.config;
 
+import com.maxruiz.structures.Elevator;
+
 /**
  * This class holds the configuration data used to create an Elevator instance
  * @see Elevator
