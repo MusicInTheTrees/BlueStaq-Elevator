@@ -127,6 +127,19 @@ java files and mess with the default parameters.
   * Square Footage of the passenger
   * Sick Factors - these play a role in the passengers ability to become sick and affect the elevator process.
 
+## Testing
+There are basic unit tests included in this project.
+
+I understand their value and necessity.
+
+I would love to write more developed test cases and I've allowed myself to do that, the way the code is written,
+but for the sake of time I have only written basic tests.
+
+To validate my elevator, I've set up several scenarios using the configuration files and watched the output.
+
+A quick way to verify the basic algoirthm works is to use a custom set of events, feed the building with X many
+passengers, make sure they get on and make sure they get off. This can be done with any number of elevators.
+
 ## Personal Notes
 
 1) This program is NOT thread safe.
