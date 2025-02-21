@@ -10,7 +10,7 @@ public class AppConfig
   private int m_frameRate = 5;
   private int m_frameTimeMillis = 200;
   private boolean m_printToFile = true;
-  private String m_printToFileName = "system_out/test_output.txt";
+  private String m_printToFileName = "system_out.txt";
 
   /**
    * Constuctor for AppConfig which takes in all the parameters to configure the main application
@@ -44,7 +44,7 @@ public class AppConfig
     m_frameRate = 5;
     m_frameTimeMillis = convertFrameRateToMillis(m_frameRate);
     m_printToFile = true;
-    m_printToFileName = "system_out/test_output.txt";
+    m_printToFileName = "system_out.txt";
   }
 
   /**
@@ -59,7 +59,7 @@ public class AppConfig
       return 1;
     }
 
-    double m = (1.0 / (double)frameRate) * 100.0;
+    double m = (1.0 / (double)frameRate) * 1000.0;
 
     return (int)m;
   }
