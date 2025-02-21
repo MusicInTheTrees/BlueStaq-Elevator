@@ -21,8 +21,8 @@ public class PassengerConfig
    * @param originFloor
    * @param lowestFloor
    * @param highestFloor
-   * @param minSqft
-   * @param maxSqft
+   * @param sqft
+   * @param sickFactors
    */
   public PassengerConfig(Integer priority, int originFloor, int lowestFloor, int highestFloor, 
                          int sqft, ArrayList<Double> sickFactors)
@@ -54,6 +54,10 @@ public class PassengerConfig
     loadDefaultPassengerConfig();
   }
 
+  /**
+   * Load default values to be able to create an instance of Passenger
+   * @see Passenger
+   */
   public void loadDefaultPassengerConfig()
   {
     m_priority = PassengerPriority.get().getLowestPriority();

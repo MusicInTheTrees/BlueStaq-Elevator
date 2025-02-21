@@ -21,6 +21,12 @@ Then to see the output of the program,
 navigate to the root folder and open
 the file <b>bluestaq-elevator-app/system_out.txt</b>
 
+### Output
+This program will print the status of the <i>events, building, and passengers</i> to the file
+> bluestaq-elevator-app/system_out.txt
+
+<b> If you want you can configure this and have it output to the console. See below.</b>
+
 ## How It Runs
 ### Events
 Events are randomly created within the Building and affect the elevator
@@ -112,6 +118,14 @@ java files and mess with the default parameters.
   * Highest Floor that the elevator can go (doesn't have to be the same as the buildings highest floor)
   * Number of Frames that the elevator takes while waiting at the simulated floor
   * Number of Frames that the elevator takes while moving between floors
+
+* PassengerConfig.java - <i>loadDefaultPassengerConfig()</i>
+  * Passenger priority
+  * Origin Floor which is where they spawn
+  * Lowest Floor
+  * Highest Floor
+  * Square Footage of the passenger
+  * Sick Factors - these play a role in the passengers ability to become sick and affect the elevator process.
 
 ## Personal Notes
 
