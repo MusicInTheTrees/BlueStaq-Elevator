@@ -31,13 +31,13 @@ These events include
   * random desination
   * Places a request
 * Stuck - The elevator gets stuck 
-  * Not fully developed
+  * <b>Not fully developed</b>
   * Elevator stops moving
   * maintenance staff arrives on floor
   * Fixes the elevator and leaves
   * Flow returns to normal
 * Fire - A fire occurs on a random floor
-  * Not full developed
+  * <b>Not full developed</b>
   * all people on all floors evacuate
   * firefighter shows up
   * Travels to the floor
