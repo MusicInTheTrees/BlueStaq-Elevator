@@ -26,20 +26,20 @@ You just need to go into the corresponding config
 java files and mess with the default parameters.
 
 * AppConfig.java
- * Frame Rate of the application
- * Print to File (or to console) flag
- * Print to File, Filename
+  * Frame Rate of the application
+  * Print to File (or to console) flag
+  * Print to File, Filename
 * BuildingConfig.java
- * Lowest Floor
- * Highest Floor
- * Maximum number of passengers that can wait on a floor for the elevator
- * Use a set of custom events
- * Elevator configuration set
+  * Lowest Floor
+  * Highest Floor
+  * Maximum number of passengers that can wait on a floor for the elevator
+  * Use a set of custom events
+  * Elevator configuration set
 * ElevatorConfig.java
- * Elevator ID
- * Starting Floor
- * Square Footage of the elevator
- * Lowest Floor that the elevator can go (doesn't have to be the same as the buildings lowest floor)
- * Highest Floor that the elevator can go (doesn't have to be the same as the buildings highest floor)
- * Number of Frames that the elevator takes while waiting at the simulated floor
- * Number of Frames that the elevator takes while moving between floors
+  * Elevator ID
+  * Starting Floor
+  * Square Footage of the elevator
+  * Lowest Floor that the elevator can go (doesn't have to be the same as the buildings lowest floor)
+  * Highest Floor that the elevator can go (doesn't have to be the same as the buildings highest floor)
+  * Number of Frames that the elevator takes while waiting at the simulated floor
+  * Number of Frames that the elevator takes while moving between floors
