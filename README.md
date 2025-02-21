@@ -6,6 +6,7 @@ This is my submission for the BlueStaq coding challenge.
 
 Open a terminal at the root project directory: <i>bluestaq-elevator-app</i>
 > mvn clean install
+
 > java -cp .\target\bluestaq-elevator-app-1.0-SNAPSHOT.jar com.maxruiz.app.App 
 
 <b><i>OR</i></b>
