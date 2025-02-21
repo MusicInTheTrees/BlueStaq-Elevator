@@ -21,7 +21,7 @@ Then to see the output of the program,
 navigate to the root folder and open
 the file <b>bluestaq-elevator-app/system_out.txt</b>
 
-## Normal Run
+## How It Runs
 ### Events
 Events are randomly created within the Building and affect the elevator
 These events include
@@ -85,7 +85,7 @@ program won't run based on the json
 config files found in the <i>bluestaq-elevator-app/resources/</i>
 folder.</b>
 
-> Please read my notes in: <i>bluestaq-elevator-app/notes.txt</i> for an explanation.
+> Please read my notes below for an explanation.
 
 <b>However</b> You can still configure the file.
 
@@ -112,3 +112,26 @@ java files and mess with the default parameters.
   * Highest Floor that the elevator can go (doesn't have to be the same as the buildings highest floor)
   * Number of Frames that the elevator takes while waiting at the simulated floor
   * Number of Frames that the elevator takes while moving between floors
+
+## Personal Notes
+
+1) This program is NOT thread safe.
+2) This program could be built in a way to make it threaded, 
+     but that's not neccessary to accomplish the goal. No need to overcomplicate.
+3) How? You could have events created and pushed onto a stack that the building
+     could injest. I would need to implement some synchronization of the event handlers.
+     I would also need to build a separate elevator request queue that could be 
+     synchronized as well. There only needs to be one request queue for every instance
+     of the elevator.
+
+<i>ResourceManager<i>
+Known incomplete class. I failed to get Gson to work.
+I followed guides online.
+1) You will find in my repo that there is a 'scripts' folder that has
+    how I attempted to manually install the module after downloading it
+2) You will also find in the 'libs' folder the .jar file that I used
+3) You will see in my pom file that I really tried (several) methods to get
+    it to work.
+
+So then why not keep trying to get gson until you succeed... :(
+Normally, I absolutely would, but I have many reasons that I'll explain in person
